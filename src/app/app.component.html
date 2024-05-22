@@ -38,7 +38,7 @@
 
             <div class="d-flex m-2 flex-column w-100">
               <label for="image">Imagen: </label>
-              <input id="image" type="text" [formControl]="images">
+              <input id="image" type="text" [formControl]="image">
             </div>
           </div>
         </div>
@@ -54,6 +54,6 @@
 <h1 class="m-2">Products</h1>
 <div class="d-flex flex-wrap justify-content-evenly mb-3">
   <div *ngFor="let product of products" class="mt-2 mx-1">
-    <app-product [product]="product"/>
+    <app-product [product]="product" />
   </div>
 </div>

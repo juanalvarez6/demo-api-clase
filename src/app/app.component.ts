@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductComponent } from './product/product.component';
 import { NgForOf } from '@angular/common';
@@ -6,8 +6,9 @@ import { ApiService } from './services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Category } from './models/category.model';
+import { Product } from './models/products.model';
 
-@Component({
+@Component({  
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, ProductComponent, NgForOf, HttpClientModule, ReactiveFormsModule],
@@ -18,7 +19,7 @@ import { Category } from './models/category.model';
 export class AppComponent {
   title = 'demo-api-clase';
 
-  products = [];
+  products: Product[] = [];
   categories: Category[] = [];
 
 
@@ -26,42 +27,29 @@ export class AppComponent {
   price = new FormControl('');
   description = new FormControl('');
   categoryId = new FormControl('');
-  images = new FormControl('');
+  image = new FormControl('');
 
-  constructor(private api: ApiService) { };
+  constructor(private api: ApiService) {
+   };
 
   ngOnInit() {
-    this.api.getAllProducts().subscribe((products: any) => {
-      products.map((item: any) => {
-        let imageStringify = JSON.stringify(item.images); // convertimos el array de imagenes a string
-        let imageNoGarbage = imageStringify
-          .substring(2, imageStringify.length - 2)
-          .replaceAll('\\', ' ')
-          .replaceAll('""', '"')
-          .replaceAll('" "', '"')
-          .replaceAll(' ', ''); 
-        try {
-          item.images = JSON.parse(imageNoGarbage);
-          item.imagesActual = item.images[0];
-        } catch (e) { }
-      });
+    this.api.getAllProducts().subscribe((products: Product[]) => {
       this.products = products;
-      console.log(products)
     });
 
-    this.api.getAllCategories().subscribe((categories: any)=>{
+    this.api.getAllCategories().subscribe((categories: Category[])=>{
       this.categories = categories;
-      console.log(categories);
     });
   }
 
   onSummit() {
-    const newProduct = {
-      title: this.name.value,
-      price: this.price.value,
-      description: this.description.value,
-      categoryId: this.categoryId.value,
-      images: [this.images.value]
+    const newProduct: Product = {
+      id: 0,
+      title: this.name.value!,
+      price: parseFloat(this.price.value!),
+      description: this.description.value!,
+      categoryId: parseInt(this.categoryId.value!),
+      image: this.image.value!
     }
 
     this.api.createProduct(newProduct).subscribe((res) => {

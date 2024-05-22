@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Category } from '../models/category.model';
+import { Product } from '../models/products.model';
+import { Observable } from 'rxjs';
 
-const urlProducts = 'https://api.escuelajs.co/api/v1/products';
-const urlCategories = 'https://api.escuelajs.co/api/v1/categories';
+const urlProducts = 'http://localhost:3000/products';
+const urlCategories = 'http://localhost:3000/categories';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +14,19 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getAllProducts() {
-    return this.http.get(urlProducts);
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(urlProducts);
   };
 
-  getAllCategories() {
-    return this.http.get(urlCategories);
+  getAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(urlCategories);
   };
 
-  createProduct(product: any){
+  createProduct(product: Product){
     return this.http.post(urlProducts, product);
   }
 
-  edit(product: any, id: number){
+  edit(product: Product, id: number){
     return this.http.put(`${urlProducts}/${id}`, product);
   }
 

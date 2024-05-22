@@ -2,6 +2,7 @@ import { NgForOf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Product } from '../models/products.model';
 
 @Component({
   selector: 'app-product',
@@ -13,7 +14,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 export class ProductComponent {
   @Input()
-  product: any;
+  product!: Product;
 
   constructor(private api: ApiService) { }
 
@@ -23,21 +24,24 @@ export class ProductComponent {
 
   editProduct(id: number) {
 
-    const updateProduct = {
+    const updateProduct: Product = {
+      id: 0,
       title: this.editName.value,
-      price: this.editPrice.value,
-      images: [this.editImages.value]
+      price: parseFloat(this.editPrice.value),
+      description: '',
+      categoryId: 0,
+      image: this.editImages.value
     };
 
     this.api.edit(updateProduct, id).subscribe(() => {
-      alert(`Producto ${id} Editado`)
+      alert(`Producto ${id} Editado`);
       location.reload();
     });
   }
 
   deleteProduct(id: number) {
     this.api.delete(id).subscribe(() => {
-      alert(`Producto ${id} Eliminado`)
+      alert(`Producto ${id} Eliminado`);
       location.reload();
     });
   }
@@ -45,6 +49,6 @@ export class ProductComponent {
   ngOnInit() {
     this.editName.setValue(this.product.title);
     this.editPrice.setValue(this.product.price);
-    this.editImages.setValue(this.product.images[0]);
+    this.editImages.setValue(this.product.image);
   }
 }
