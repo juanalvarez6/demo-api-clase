@@ -4,8 +4,8 @@ import { Category } from '../models/category.model';
 import { Product } from '../models/products.model';
 import { Observable } from 'rxjs';
 
-const urlProducts = 'http://localhost:3000/products';
-const urlCategories = 'http://localhost:3000/categories';
+const urlProducts = 'https://backend-with-turso.onrender.com/products';
+const urlCategories = 'https://backend-with-turso.onrender.com/categories';
 
 @Injectable({
   providedIn: 'root'
